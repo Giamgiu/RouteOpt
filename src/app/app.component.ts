@@ -1,7 +1,8 @@
 import { mapToMapExpression } from '@angular/compiler/src/render3/util';
 import { Component, OnInit, ɵɵclassMapInterpolateV } from '@angular/core';
 import { Loader } from '@googlemaps/js-api-loader';
-const roma = { lat: 41.89038, lng: 12.49169};
+import { Nodo } from './nodo';
+const roma = { lat: 41.89038, lng: 12.49169 };
 var labelIndex = 1;
 
 
@@ -13,47 +14,52 @@ var labelIndex = 1;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  
+
   title = 'google-maps';
-  list: any[]= []
-   map: any;
+  list: Nodo[] = []
+  map: any;
+  startermarker: any = null;
 
   ngOnInit(): void {
-    
-    let loader =new Loader({
-      apiKey : 'AIzaSyC5eTcNbxr52pcXxiMo6ZpB_Nkx6mov3AE'})
-      
 
-      loader.load().then(() =>{
-        this.map = new google.maps.Map(document.getElementById("mappa") as HTMLElement,{
-          zoom: 12,
-          center: roma
-        })        
-       
+    let loader = new Loader({
+      apiKey: 'AIzaSyC5eTcNbxr52pcXxiMo6ZpB_Nkx6mov3AE'
+    })
 
-        google.maps.event.addListener(this.map, "click", (event:any) => {
-          this.addMarker(event.latLng);
-        });
 
-        const service = new google.maps.DistanceMatrixService();
-  
-  })
- 
- 
-}
+    loader.load().then(() => {
+      this.map = new google.maps.Map(document.getElementById("mappa") as HTMLElement, {
+        zoom: 12,
+        center: roma
+      })
 
- addMarker(location:any):void {         
-  var Marker = new google.maps.Marker({
-    animation: google.maps.Animation.DROP,
-    icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red" + labelIndex + ".png", 
-    position: location,  
-    map: this.map,             
-  });
-  var pos = new nodo (location.lat,location.lng,false);
-  this.list.push({lat: location.lat(), lon : location.lng()})  ;         
-  console.log(this.list)
-  labelIndex++   
- 
- 
-}       
+
+      google.maps.event.addListener(this.map, "click", (event: any) => {
+        this.addMarker(event.latLng);
+      });
+
+      const service = new google.maps.DistanceMatrixService();
+
+    })
+
+
+  }
+
+  addMarker(location: any): void {
+    var Marker = new google.maps.Marker({
+      animation: google.maps.Animation.DROP,
+      position: location,
+      map: this.map,
+    });
+
+    const marker = new Nodo(location.lat(), location.lng());
+    this.list.push(marker);
+    if (!this.startermarker){
+      this.startermarker = marker;
+    }
+    console.log(this.list)
+    labelIndex++
+
+
+  }
 }
