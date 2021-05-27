@@ -15,7 +15,7 @@ var labelIndex = 1;
 export class AppComponent implements OnInit {
   
   title = 'google-maps';
-  list: nodo[]= []
+  list: any[]= []
    map: any;
 
   ngOnInit(): void {
