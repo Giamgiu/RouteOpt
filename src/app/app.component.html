@@ -1,8 +1,17 @@
-<div class="full" id="mappa">
 
+<div class="full" id="map-canvas">
+  
 </div>
 
-<div class="array" *ngFor="let q of list">    
-    {{q|json}}
-</div>
+ <h1 class = "counter" id="dispmark"> 0 / 15 marker </h1>
  
+ <input
+ id="pac-input"
+ class="controls"
+ type="text"
+ placeholder="Search Box"
+ 
+/>
+
+<input onclick="deleteMarkers();" type="button" value="Delete Markers" />
+
