@@ -1,9 +1,10 @@
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="full" id="map-canvas">
   
 </div>
 
- <h1 class = "counter" id="dispmark"> 0 / 15 marker </h1>
+ <h1 class = "counter" id="dispmark"> 0 / 10 marker </h1>
  
  <input
  id="pac-input"
@@ -13,5 +14,10 @@
  
 />
 
-<input onclick="deleteMarkers();" type="button" value="Delete Markers" />
+<input id = "button" (click)="rimuoviMarker();" type="button" value="Delete All" />
+<input id = "calc" (click)="calcolodistanza();" type="button" value="calc" />
 
+<div>
+    <strong>Results</strong>
+  </div>
+  <div id="output"></div>

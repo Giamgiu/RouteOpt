@@ -6,8 +6,6 @@ const roma = { lat: 41.89038, lng: 12.49169 };
 var markercount = 0;
 
 
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,8 +13,8 @@ var markercount = 0;
 })
 export class AppComponent implements OnInit {
 
-
-
+  originlist: google.maps.LatLng[]=[]
+  listamarker: google.maps.Marker[] = [];
   title = 'google-maps';
   list: Nodo[] = []
   map: any;
@@ -42,10 +40,11 @@ export class AppComponent implements OnInit {
 
       var input = (document.getElementById('pac-input'));
 
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
       var searchBox = new google.maps.places.SearchBox(input as HTMLInputElement);
 
+     
 
       this.map.addListener("bounds_changed", () => {
 
@@ -86,24 +85,24 @@ export class AppComponent implements OnInit {
 
         this.map.fitBounds(bounds);
       });
-
-
+  
       google.maps.event.addListener(this.map, "click", (event: any) => {
 
-        if (markercount < 15) {
+        if (markercount < 10) {
 
           this.addMarker(event.latLng);
           markercount += 1;
           var dispmark = document.getElementById('dispmark');
-          if (dispmark) dispmark.textContent = markercount + ' / 15 marker';
+          if (dispmark) dispmark.textContent = markercount + ' / 10 marker';
 
         } else {
-          window.alert("reach 15 marker");
+          window.alert("reach 10 marker");
+         
         }
 
       });
-
-      markers.addListener
+      
+     
 
 
     })
@@ -118,12 +117,13 @@ export class AppComponent implements OnInit {
       animation: google.maps.Animation.DROP,
       position: location,
       map: this.map,
+      draggable : true,
     });
-
-    const marker = new Nodo(location.lat(), location.lng());
-    this.list.push(marker);
+    this.listamarker.push(Marker)
+    const dest = new Nodo(location.lat(), location.lng());
+    this.list.push(dest);
     if (!this.startermarker) {
-      this.startermarker = marker;
+      this.startermarker = dest;
     }
     console.log(this.list)
 
@@ -131,5 +131,85 @@ export class AppComponent implements OnInit {
 
   }
 
+  rimuoviMarker (){
+    const outputDiv = document.getElementById("output");
+     for( let i = 0; i < this.listamarker.length; i++){
+      this.listamarker[i].setMap(null)
+     
+     }
+     this.list = [];
+     this.listamarker.length=0;
+     this.originlist.length=0;
+     this.originlist=[];
+     markercount =0;
+     
+     var dispmark = document.getElementById('dispmark');
+         if (dispmark) dispmark.textContent = markercount + ' / 10 marker';
+         outputDiv!.innerHTML = "";
+  }
+
+  calcolodistanza(){
+    const outputDiv = document.getElementById("output");
+    outputDiv!.innerHTML = "";
+    for( let i = 0; i < this.listamarker.length; i++){
+      this.originlist.push( this.listamarker[i].getPosition()!)
+    }
+    const geocoder = new google.maps.Geocoder();
+    const service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix(
+      {
+        origins: this.originlist,
+        destinations: this.originlist,
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC,
+        avoidHighways: false,
+        avoidTolls: false,
+      },
+      (response, status) => {
+        if (status !== "OK") {
+          alert("Error was: " + status);
+        } else {
+          const originList = response?.originAddresses;
+          const destinationList = response?.destinationAddresses;
+         
+          outputDiv!.innerHTML = "";
+          
   
+          const showGeocodedAddressOnMap =  (asDestination:any) => {
+            
+  
+            return  (results:any, status:any) => {
+              
+            };
+          };
+  
+          for (let i = 0; i < originList!.length; i++) {
+            const results = response?.rows[i].elements;
+            geocoder.geocode(
+              { address: originList![i] },
+              showGeocodedAddressOnMap(false)
+            );
+  
+            for (let j = 0; j < results!.length; j++) {
+              geocoder.geocode(
+                { address: destinationList![j] },
+                showGeocodedAddressOnMap(true)
+              );
+              outputDiv!.innerHTML +=
+                originList![i] +
+                " to " +
+                destinationList![j] +
+                ": " +
+                results![j].distance.text +
+                " in " +
+                results![j].duration.text +
+                "<br>";
+            }
+          }
+        }
+      }
+    );
+this.originlist=[];
+this.originlist.length=0;
+  };
 }
