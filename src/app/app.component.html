@@ -4,8 +4,8 @@
   
 </div>
 
- <h1 class = "counter" id="dispmark"> 0 / 10 marker </h1>
- 
+<h1 id = "dispmark" class = "counter">  {{ markercount }} / 10 Marker</h1>
+<h2 id = "time" class = "counter">  Time optimization</h2>
  <input
  id="pac-input"
  class="controls"
@@ -14,10 +14,16 @@
  
 />
 
-<input id = "button" (click)="rimuoviMarker();" type="button" value="Delete All" />
-<input id = "calc" (click)="calcolodistanza();" type="button" value="calc" />
+  <input id = "delete"  type="button" value="Delete All" />
+  
+ 
+  <input  id = "lancia"  type="button" value="Find route" />
+ 
+  
 
-<div>
-    <strong>Results</strong>
-  </div>
-  <div id="output"></div>
+  <label class="toggle" for="myToggle">
+    <input class="toggle__input" name="" type="checkbox" id="myToggle">
+    <div class="toggle__fill"></div>
+</label>
+
+  <div id="outputdist"> {{ outputdist }}</div>

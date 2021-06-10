@@ -1,16 +1,24 @@
 
 .full {
-    width: 50%;
+  position: fixed;
+    width: 90%;
     height: 80%;
-    left: 35%;
-    top:10%;
+    left: 50px;    
+    top:80px;
   }
  
   .counter{
-   position: absolute;
-   align-items: center;
-    left: 50vw;
-    top:0vw;
+   position:absolute;
+   
+    left: 100px;
+    top:30px;
+  }
+  #time {
+    position:absolute;        
+      top: 32px;
+      left: 660px;
+      font-family: Roboto;
+      font-size: 15px;
   }
   #pac-input {
     background-color: #fff;
@@ -32,11 +40,41 @@
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   }
-
-  #button {
+  
+    #delete {
+      position:absolute;        
+      top: 30px;
+      left: 300px;
+      display: inline-block;
+      box-sizing: border-box;
+      border: none;
+      border-radius: 4px;
+      padding: 0 16px;
+      min-width: 64px;
+      height: 36px;
+      vertical-align: middle;
+      text-align: center;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
+      background-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 36px;
+      overflow: hidden;
+      outline: none;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+     
+    }
+  
+   
+  #lancia{
     position:absolute;
-    top: 5%;
-    left: 50vw;
+    top: 30px;
+    left: 450px;
     display: inline-block;
     box-sizing: border-box;
     border: none;
@@ -49,7 +87,7 @@
     text-overflow: ellipsis;
     text-transform: uppercase;
     color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
-    background-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+    background-color:rgb(var(--pure-material-primary-rgb, 33, 150, 243));
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
     font-size: 14px;
@@ -59,5 +97,51 @@
     outline: none;
     cursor: pointer;
     transition: box-shadow 0.2s;
-   
   }
+
+  #outputdist{
+    position: absolute;
+    top:90%;
+  }
+  
+  .toggle {
+    position:absolute;        
+      top: 38px;
+      left: 610px;
+    --width: 40px;
+    --height: calc(var(--width) / 2);
+    --border-radius: calc(var(--height) / 2);
+
+    display: inline-block;
+    cursor: pointer;
+}
+.toggle__input {
+  display: none;
+}
+.toggle__fill {
+  position: relative;
+  width: var(--width);
+  height: var(--height);
+  border-radius: var(--border-radius);
+  background: #dddddd;
+ 
+}
+.toggle__fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--height);
+  width: var(--height);
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  border-radius: var(--border-radius);
+  transition: transform 0.2s;
+}
+.toggle__input:checked ~ .toggle__fill {
+  background: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+}
+
+.toggle__input:checked ~ .toggle__fill::after {
+  transform: translateX(var(--height));
+}
