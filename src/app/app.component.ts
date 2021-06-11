@@ -409,10 +409,10 @@ export class AppComponent implements OnInit {
 
         });
         if (this.timeopt == false) {
-          this.outputdist = 'Il percorso più breve è di ' + totalDist + ' km'
+          this.outputdist = 'Shortest route is ' + totalDist + ' km long in ' + this.tohms(totalTime)
         }
         else {
-          this.outputdist = 'Il percorso più veloce è di ' + this.tohms(totalTime)
+          this.outputdist = 'Fastest route is  ' + totalDist + ' km long in ' + this.tohms(totalTime)
         }
         this.listamarker[0] = Marker1
         console.log(this.listamarker.length)
@@ -490,9 +490,7 @@ export class AppComponent implements OnInit {
     var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
     var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-    if (hours   < 10) {hours   = 0 + hours;}
-    if (minutes < 10) {minutes = 0 +minutes;}
-    if (seconds < 10) {seconds = 0 +seconds;}
+  
     return hours+':'+minutes+':'+seconds;
 }
 
