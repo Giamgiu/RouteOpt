@@ -297,8 +297,8 @@ export class AppComponent implements OnInit {
     var bestdistance = 0;
     var count = 0;
     var indice: number[] = [0];
-    var bestindice: number[] = [0];
-    var preindice: number[] = [0];
+    var bestindice: number[] = [];
+    var preindice: number[] = [];
 
     for (let i = 0; i < (this.listamarker.length - 1); i++) {
       indice[i] = i + 1;
