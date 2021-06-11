@@ -1,9 +1,10 @@
 
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, SystemJsNgModuleLoader } from '@angular/core';
 import { Loader, LoaderOptions } from '@googlemaps/js-api-loader';
 
+
 import { Nodo } from './nodo';
-const roma = {lat:  41.76820695690988, lng: 12.470126152038574 };
+const roma = { lat: 41.76820695690988, lng: 12.470126152038574 };
 const roma2 = { lat: 42.43, lng: 12.49169 };
 
 @Component({
@@ -21,10 +22,10 @@ export class AppComponent implements OnInit {
   list: Nodo[] = []
   map: any;
   startermarker: any = null;
-
+  timeopt: boolean = false;
   listaviaggioparzialeshuf: google.maps.DirectionsWaypoint[] = [];
   matricedistanze: number[][] = [];
-  distancematrix: number[][] = [];
+  weightmatrix: number[][] = [];
   indexex: number[] = [];
   preindexex: number[] = [];
 
@@ -57,10 +58,15 @@ export class AppComponent implements OnInit {
       this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
       document.getElementById("lancia")!.addEventListener("click", () => {
-        this.gestorecalc();
-        setTimeout(() => this.viaggiorandom(directionsService, directionsRenderer), this.listamarker.length*500)
-
-
+        if (this.listamarker.length == 1){
+          alert("Enter at least two marker")
+        }else{
+          this.gestorecalc();
+          setTimeout(() => this.viaggiorandom(directionsService, directionsRenderer), this.listamarker.length * 500)
+  
+  
+        }
+      
       });
       document.getElementById("delete")!.addEventListener("click", () => {
         this.rimuoviMarker(directionsService, directionsRenderer);
@@ -125,6 +131,16 @@ export class AppComponent implements OnInit {
       });
 
 
+      document.getElementById("myToggle")!.addEventListener("click", () => {
+        if (this.timeopt == false) {
+          this.timeopt = true;
+        }
+        else {
+          this.timeopt = false;
+        }
+
+      });
+
 
 
     })
@@ -171,7 +187,7 @@ export class AppComponent implements OnInit {
     }
     this.list = [];
     this.listamarker = [];
-   
+
     this.markerpos = [];
     this.markercount = 0;
     this.outputdist = '';
@@ -247,8 +263,13 @@ export class AppComponent implements OnInit {
       }
 
     );
-
-    return matricedistanze;
+      if (this.timeopt == false){
+        return matricedistanze;
+      }
+      else {
+        return matricetempi;
+      }
+    
   };
 
 
@@ -259,8 +280,8 @@ export class AppComponent implements OnInit {
 
 
     console.log(this.markerpos.length);
-    this.distancematrix = this.calcolodistanza();
-    setTimeout(() => this.algoritmo(this.distancematrix), this.listamarker.length*80)
+    this.weightmatrix = this.calcolodistanza();
+    setTimeout(() => this.algoritmo(this.weightmatrix), this.listamarker.length * 80)
 
   }
 
@@ -269,10 +290,10 @@ export class AppComponent implements OnInit {
 
 
 
-  algoritmo(distancematrix: number[][]) {
-    var Temp = 2000 + 800* this.listamarker.length;
-    var numIter = Math.pow(this.listamarker.length-1, 4)
-    var cooling = 0.97 + 0.003*(this.listamarker.length-1);
+  algoritmo(weightmatrix: number[][]) {
+    var Temp = 2000 + 800 * this.listamarker.length;
+    var numIter = Math.pow(this.listamarker.length - 1, 4)
+    var cooling = 0.97 + 0.003 * (this.listamarker.length - 1);
     var bestdistance = 0;
     var count = 0;
     var indice: number[] = [0];
@@ -291,13 +312,13 @@ export class AppComponent implements OnInit {
       this.listaviaggioparzialeshuf[i] = { location: this.markerpos[bestindice[i]] };
       this.final[i] = this.markerpos[bestindice[i]]
     }
-    bestdistance = this.calcolatot(indice, distancematrix)
+    bestdistance = this.calcolatot(indice, weightmatrix)
     for (let i = 0; i < (numIter); i++) {
       count++;
       if (Temp > 0.1) {
         preindice = indice;
         indice = this.invertinodi(indice)
-        var currdist = this.calcolatot(indice, distancematrix)
+        var currdist = this.calcolatot(indice, weightmatrix)
         if (currdist < bestdistance) {
           console.log(count + " " + currdist + "minore" + bestdistance + indice)
           bestdistance = currdist;
@@ -307,6 +328,7 @@ export class AppComponent implements OnInit {
           for (let i = 0; i < (this.listamarker.length - 1); i++) {
             this.listaviaggioparzialeshuf[i] = { location: this.markerpos[bestindice[i]] };
             this.final[i] = this.markerpos[bestindice[i]]
+            
           }
 
         } else if (Math.exp((bestdistance - currdist) / Temp) < Math.random()) {
@@ -378,6 +400,7 @@ export class AppComponent implements OnInit {
           });
           this.listamarker[i] = (Marker)
         }
+
         var Marker1 = new google.maps.Marker({
           position: this.markerpos[0],
           map: this.map,
@@ -385,13 +408,20 @@ export class AppComponent implements OnInit {
           label: (1).toString()
 
         });
+        if (this.timeopt == false) {
+          this.outputdist = 'Il percorso più breve è di ' + totalDist + ' km'
+        }
+        else {
+          this.outputdist = 'Il percorso più veloce è di ' + this.tohms(totalTime)
+        }
         this.listamarker[0] = Marker1
         console.log(this.listamarker.length)
       }
     });
 
     console.log(this.listamarker.length);
-
+   
+    
 
 
   }
@@ -454,6 +484,17 @@ export class AppComponent implements OnInit {
     array[b] = app
     return array
   }
+  tohms (timesec:number) {
+    var sec_num = timesec // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = 0 + hours;}
+    if (minutes < 10) {minutes = 0 +minutes;}
+    if (seconds < 10) {seconds = 0 +seconds;}
+    return hours+':'+minutes+':'+seconds;
+}
 
 }
 

@@ -13,6 +13,12 @@
     left: 100px;
     top:30px;
   }
+  .outputdist{
+    position:absolute;
+    
+     left: 50px;
+     top:90%;
+   }
   #time {
     position:absolute;        
       top: 32px;
@@ -99,10 +105,7 @@
     transition: box-shadow 0.2s;
   }
 
-  #outputdist{
-    position: absolute;
-    top:90%;
-  }
+
   
   .toggle {
     position:absolute;        
