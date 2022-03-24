@@ -368,7 +368,7 @@ export class AppComponent implements OnInit {
       origin: this.markerpos[0],
       destination: this.markerpos[0],
       waypoints: this.listaviaggioparzialeshuf,
-      optimizeWaypoints: false,
+      optimizeWaypoints: true,
       travelMode: google.maps.TravelMode.DRIVING,
     };
 
